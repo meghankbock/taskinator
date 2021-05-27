@@ -236,7 +236,7 @@ var taskStatusChangeHandler = function (event) {
     ".task-item[data-task-id='" + taskId + "']"
   );
 
-  if (status === "to do") {
+  if (statusValue === "to do") {
     tasksToDoEl.appendChild(taskSelected);
   } else if (statusValue === "in progress") {
     tasksInProgressEl.appendChild(taskSelected);
@@ -273,9 +273,8 @@ var loadTasks = function () {
   }
 };
 
+loadTasks();
 formEl.addEventListener("submit", taskFormHandler);
 
 pageContentEl.addEventListener("click", taskButtonHandler);
 pageContentEl.addEventListener("change", taskStatusChangeHandler);
-
-loadTasks();
