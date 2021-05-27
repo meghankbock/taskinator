@@ -10,10 +10,10 @@ var taskFormHandler = function (event) {
   event.preventDefault();
 
   var taskNameInput = document.querySelector("input[name='task-name']").value;
-  var taskTypeInput = document.querySelector("select[name='task-type']").value;
+  var taskPriorityInput = document.querySelector("select[name='task-priority']").value;
 
   // check if input values are empty strings
-  if (!taskNameInput || !taskTypeInput) {
+  if (!taskNameInput || !taskPriorityInput) {
     alert("You need to fill out the task form!");
     return false;
   }
@@ -24,14 +24,14 @@ var taskFormHandler = function (event) {
   // has data attribute, so get task id and call function to complete edit process
   if (isEdit) {
     var taskId = formEl.getAttribute("data-task-id");
-    completeEditTask(taskNameInput, taskTypeInput, taskId);
+    completeEditTask(taskNameInput, taskPriorityInput, taskId);
   }
   // no data attribute, so create object as normal and pass to createTaskEl function
   else {
     //package up data as an object
     var taskDataObj = {
       name: taskNameInput,
-      type: taskTypeInput,
+      priority: taskPriorityInput,
       status: "to do",
     };
 
@@ -39,7 +39,7 @@ var taskFormHandler = function (event) {
     createTaskEl(taskDataObj);
 
     // reset to default values
-  formEl.reset();
+    formEl.reset();
   }
 };
 
@@ -59,8 +59,8 @@ var createTaskEl = function (taskDataObj) {
   taskInfoEl.innerHTML =
     "<h3 class='task-name'>" +
     taskDataObj.name +
-    "</h3><span class='task-type'>" +
-    taskDataObj.type +
+    "</h3><span class='task-priority'>" +
+    taskDataObj.priority +
     "</span>";
 
   //listItemEl.textContent = taskNameInput;
@@ -78,7 +78,7 @@ var createTaskEl = function (taskDataObj) {
   else if (taskDataObj.status === "in progress") {
     tasksInProgressEl.appendChild(listItemEl);
   }
-  else if (taskDataObj.status === "completed") {
+  else if (taskDataObj.status === "complete") {
     tasksCompletedEl.appendChild(listItemEl);
   }
 
@@ -93,7 +93,7 @@ var createTaskEl = function (taskDataObj) {
   taskIdCounter++;
 };
 
-var completeEditTask = function (taskName, taskType, taskId) {
+var completeEditTask = function (taskName, taskPriority, taskId) {
   // find the matching task list item
   var taskSelected = document.querySelector(
     ".task-item[data-task-id='" + taskId + "']"
@@ -101,14 +101,16 @@ var completeEditTask = function (taskName, taskType, taskId) {
 
   // set new values
   taskSelected.querySelector("h3.task-name").textContent = taskName;
-  taskSelected.querySelector("span.task-type").textContent = taskType;
+  taskSelected.querySelector("span.task-priority").textContent = taskPriority;
 
   // loop through tasks array and task object with new content
   for (var i = 0; i < tasks.length; i++) {
     if (tasks[i].id === parseInt(taskId)) {
       tasks[i].name = taskName;
-      tasks[i].type = taskType;
+      tasks[i].priority = taskPriority;
     }
+    // reset to default values
+    formEl.reset();
   }
 
   saveTasks();
@@ -184,13 +186,13 @@ var editTask = function (taskId) {
     ".task-item[data-task-id='" + taskId + "']"
   );
 
-  // get content from task name and type
+  // get content from task name and priority
   var taskName = taskSelected.querySelector("h3.task-name").textContent;
 
-  var taskType = taskSelected.querySelector("span.task-type").textContent;
+  var taskPriority = taskSelected.querySelector("span.task-priority").textContent;
 
   document.querySelector("input[name='task-name']").value = taskName;
-  document.querySelector("select[name='task-type']").value = taskType;
+  document.querySelector("select[name='task-priority']").value = taskPriority;
 
   document.querySelector("#save-task").textContent = "Save Task";
 
@@ -235,7 +237,7 @@ var taskStatusChangeHandler = function (event) {
     tasksToDoEl.appendChild(taskSelected);
   } else if (statusValue === "in progress") {
     tasksInProgressEl.appendChild(taskSelected);
-  } else if (statusValue === "completed") {
+  } else if (statusValue === "complete") {
     tasksCompletedEl.appendChild(taskSelected);
   }
 
