@@ -73,12 +73,15 @@ var createTaskEl = function (taskDataObj) {
 
   // add entire list item to list
   if(taskDataObj.status === "to do") {
+    listItemEl.querySelector("select[name='status-change']").selectedIndex = 0;
     tasksToDoEl.appendChild(listItemEl);
   }
   else if (taskDataObj.status === "in progress") {
+    listItemEl.querySelector("select[name='status-change']").selectedIndex = 1;
     tasksInProgressEl.appendChild(listItemEl);
   }
   else if (taskDataObj.status === "complete") {
+    listItemEl.querySelector("select[name='status-change']").selectedIndex = 2;
     tasksCompletedEl.appendChild(listItemEl);
   }
 
